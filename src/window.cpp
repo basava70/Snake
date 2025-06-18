@@ -1,6 +1,6 @@
 #include "window.hpp"
 
-bool Window::init(char const *title, int height, int width,
+bool Window::init(char const *title, int width, int height,
                   SDL_WindowFlags flags) {
   mWindow = SDL_CreateWindow(title, width, height, flags);
   if (!mWindow) {
@@ -9,6 +9,9 @@ bool Window::init(char const *title, int height, int width,
   }
   return true;
 }
+
+SDL_Window *Window::getWindow() const { return mWindow; }
+
 void Window::destroy() {
   if (mWindow) {
     SDL_Log("Destroying SDL_Window");

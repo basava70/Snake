@@ -2,7 +2,8 @@
 #include "input_handler.hpp"
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
-    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags) {}
+    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags),
+      mSnake(width / 2.0f, height / 2.0f) {}
 
 bool Game::init() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -23,6 +24,9 @@ void Game::processInput() {
   for (auto event : mInputHandler.triggeredEvents()) {
     if (event == InputEvents::Quit)
       mIsRunning = false;
+    else if (event == InputEvents::WindowResize) {
+      SDL_GetWindowSize(mWindow.getWindow(), &mWidth, &mHeight);
+    };
   }
 
   for (auto &command : mInputHandler.triggeredCommands()) {
@@ -31,8 +35,9 @@ void Game::processInput() {
 }
 void Game::update() {}
 void Game::generateOutput() {
-  SDL_Color color_blue{0, 0, 255, 255};
-  mRenderer.clear(color_blue);
+  SDL_Color color{0, 0, 0, 255};
+  mRenderer.clear(color);
+  mSnake.draw(mRenderer);
   mRenderer.present();
 }
 

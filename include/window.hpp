@@ -2,9 +2,9 @@
 #include <SDL3/SDL.h>
 class Window {
 public:
-  bool init(char const *name, int height, int width, SDL_WindowFlags flags);
+  bool init(char const *name, int width, int height, SDL_WindowFlags flags);
   void destroy();
-  SDL_Window *getWindow() const { return mWindow; };
+  SDL_Window *getWindow() const;
   ~Window();
 
 private:

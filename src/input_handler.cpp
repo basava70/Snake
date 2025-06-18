@@ -1,5 +1,4 @@
 #include "input_handler.hpp"
-#include <memory>
 
 InputHandler::InputHandler() {
   mEventBindings[SDLK_Q] = InputEvents::Quit;
@@ -18,6 +17,8 @@ void InputHandler::run() {
   while (SDL_PollEvent(&mEvent)) {
     if (mEvent.type == SDL_EVENT_QUIT)
       mTriggeredEvents.emplace(InputEvents::Quit);
+    else if (mEvent.type == SDL_EVENT_WINDOW_RESIZED)
+      mTriggeredEvents.emplace(InputEvents::WindowResize);
 
     if (mEvent.type == SDL_EVENT_KEY_DOWN && !mEvent.key.repeat) {
       SDL_Keycode key = mEvent.key.key;
