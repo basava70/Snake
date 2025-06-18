@@ -1,5 +1,11 @@
+#include "game.hpp"
 #include <print>
-int main (int argc, char *argv[]) {
+int main() {
+    Game game("Snake");
+    if (!game.run()) {
+        std::println("Failure");
+        return EXIT_FAILURE;
+    }
     std::println("Sucess!!");
-    return 0;
+    return EXIT_SUCCESS;
 }
