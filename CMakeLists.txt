@@ -20,7 +20,8 @@ message(STATUS "Found SDL3 version: ${SDL3_VERSION}")
 message(STATUS "Found SDL3_image version: ${SDL3_image_VERSION}")
 message(STATUS "Found SDL3_ttf_version: ${SDL3_ttf_VERSION}")
 
-set(SOURCE_FILES src/main.cpp src/window.cpp src/game.cpp src/renderer.cpp)
+set(SOURCE_FILES src/main.cpp src/window.cpp src/game.cpp src/renderer.cpp
+src/input_handler.cpp src/commands.cpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
