@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "input_handler.hpp"
+#include <cstdint>
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
     : mTitle(title), mWidth(width), mHeight(height), mFlags(flags),
@@ -30,10 +31,10 @@ void Game::processInput() {
   }
 
   for (auto &command : mInputHandler.triggeredCommands()) {
-    command->execute();
+    command->execute(mSnake);
   }
 }
-void Game::update() {}
+void Game::update(float dt) { mSnake.update(dt); }
 void Game::generateOutput() {
   SDL_Color color{0, 0, 0, 255};
   mRenderer.clear(color);
@@ -44,11 +45,27 @@ void Game::generateOutput() {
 bool Game::run() {
   if (!init())
     return false;
+
+  constexpr float targetFrameTime = 1.0f / 120.0f;
+  uint64_t lastTime = SDL_GetPerformanceCounter();
+  const auto freq = static_cast<float>(SDL_GetPerformanceFrequency());
+
   mIsRunning = true;
   while (mIsRunning) {
+
+    uint64_t now = SDL_GetPerformanceCounter();
+    float dt = (now - lastTime) / freq; // deltatime
+    lastTime = now;
+
     processInput();
-    update();
+    update(dt);
     generateOutput();
+
+    float frameTime = (SDL_GetPerformanceCounter() - now) / freq;
+    float sleepTime = targetFrameTime - frameTime;
+
+    if (sleepTime > 0.0f)
+      SDL_Delay(static_cast<Uint32>(sleepTime * 1000));
   }
 
   return true;

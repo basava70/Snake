@@ -22,7 +22,7 @@ private:
 
   Snake mSnake;
 
-  void update();
+  void update(float);
   void generateOutput();
 
   char const *mTitle{nullptr};

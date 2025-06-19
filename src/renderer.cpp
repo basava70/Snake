@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include "config.hpp"
 
 bool Renderer::init(SDL_Window *window) {
   mRenderer = SDL_CreateRenderer(window, 0);
@@ -6,6 +7,9 @@ bool Renderer::init(SDL_Window *window) {
     SDL_Log("Error creating Renderer: %s", SDL_GetError());
     return false;
   }
+  SDL_SetRenderLogicalPresentation(mRenderer, GameConfig::LogicalWidth,
+                                   GameConfig::LogicalHeight,
+                                   SDL_LOGICAL_PRESENTATION_LETTERBOX);
   return true;
 }
 
