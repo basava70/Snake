@@ -14,6 +14,7 @@ public:
 
   void setDirection(float, float);
   void update(float);
+  SDL_FRect getHead() const;
 
 private:
   SDL_Color mColor{0, 255, 0, 255};

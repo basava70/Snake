@@ -35,7 +35,14 @@ void Game::processInput() {
   }
 }
 
-void Game::update(float dt) { mSnake.update(dt); }
+void Game::update(float dt) {
+  mSnake.update(dt);
+  // collision
+  SDL_FRect snakeHead = mSnake.getHead();
+  SDL_FRect foodHead = mFood.getHead();
+  if (SDL_HasRectIntersectionFloat(&snakeHead, &foodHead))
+    mFood.respawn();
+}
 
 void Game::generateOutput() {
   SDL_Color color{125, 125, 125, 255};

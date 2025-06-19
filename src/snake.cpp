@@ -16,6 +16,8 @@ void Snake::setDirection(float dx, float dy) {
   mVelocity.y = dy * GameConfig::SnakeSpeed;
 }
 
+SDL_FRect Snake::getHead() const { return mBody.front(); }
+
 void Snake::update(float dt) {
   mBody[0].x += mVelocity.x * dt;
   mBody[0].y += mVelocity.y * dt;
