@@ -34,11 +34,14 @@ void Game::processInput() {
     command->execute(mSnake);
   }
 }
+
 void Game::update(float dt) { mSnake.update(dt); }
+
 void Game::generateOutput() {
-  SDL_Color color{0, 0, 0, 255};
+  SDL_Color color{125, 125, 125, 255};
   mRenderer.clear(color);
   mSnake.draw(mRenderer);
+  mFood.draw(mRenderer);
   mRenderer.present();
 }
 
@@ -50,6 +53,7 @@ bool Game::run() {
   uint64_t lastTime = SDL_GetPerformanceCounter();
   const auto freq = static_cast<float>(SDL_GetPerformanceFrequency());
 
+  mFood.respawn();
   mIsRunning = true;
   while (mIsRunning) {
 

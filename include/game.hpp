@@ -1,4 +1,5 @@
 #pragma once
+#include "food.hpp"
 #include "input_handler.hpp"
 #include "renderer.hpp"
 #include "snake.hpp"
@@ -21,6 +22,7 @@ private:
   InputHandler mInputHandler;
 
   Snake mSnake;
+  Food mFood;
 
   void update(float);
   void generateOutput();
