@@ -9,14 +9,15 @@ class Snake {
 public:
   Snake(float x, float y, float width = GameConfig::GridCellSize,
         float height = GameConfig::GridCellSize);
-  void grow();
   void draw(Renderer &) const;
 
   void setDirection(float, float);
   void update(float);
   SDL_FRect getHead() const;
+  void grow();
 
 private:
+  bool mShouldGrow = false;
   SDL_Color mColor{0, 255, 0, 255};
   std::vector<SDL_FRect> mBody;
   SDL_FPoint mVelocity{1.0f * GameConfig::SnakeSpeed,

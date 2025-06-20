@@ -36,12 +36,14 @@ void Game::processInput() {
 }
 
 void Game::update(float dt) {
-  mSnake.update(dt);
   // collision
   SDL_FRect snakeHead = mSnake.getHead();
   SDL_FRect foodHead = mFood.getHead();
-  if (SDL_HasRectIntersectionFloat(&snakeHead, &foodHead))
+  if (SDL_HasRectIntersectionFloat(&snakeHead, &foodHead)) {
+    mSnake.grow();
     mFood.respawn();
+  }
+  mSnake.update(dt);
 }
 
 void Game::generateOutput() {
