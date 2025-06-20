@@ -67,10 +67,11 @@ void Snake::update(float dt) {
     head.y = maxY - cell;
 
   if (mShouldGrow) {
-    int dx = (mVelocity.x > 0) - (mVelocity.x < 0);
-    int dy = (mVelocity.y > 0) - (mVelocity.y < 0);
-    tail.mRect.x -= dx * GameConfig::GridCellSize;
-    tail.mRect.y -= dy * GameConfig::GridCellSize;
+    tail.mDirection = mBody.back().mDirection;
+    tail.mRect.x =
+        mBody.back().mRect.x - tail.mDirection.x * GameConfig::GridCellSize;
+    tail.mRect.y =
+        mBody.back().mRect.y - tail.mDirection.y * GameConfig::GridCellSize;
     mBody.push_back(tail);
     // std::println("Begin print of size: {}", mBody.size());
     // for (auto const &rect : mBody) {
