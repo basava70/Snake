@@ -3,8 +3,7 @@
 #include <cstdint>
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
-    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags),
-      mSnake(width / 2.0f, height / 2.0f) {}
+    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags), mSnake() {}
 
 bool Game::init() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
