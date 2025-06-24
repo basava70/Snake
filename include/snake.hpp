@@ -12,15 +12,13 @@ struct SnakeSegment {
                   GameConfig::SnakeSegmentSize};
 };
 
-struct BreadCrumbs {
+struct PathTrails {
   SDL_FPoint position{0.0f, 0.0f};
 };
 
 class Snake {
 public:
   Snake();
-  Snake(float x, float y, float width = GameConfig::SnakeSegmentSize,
-        float height = GameConfig::SnakeSegmentSize);
   void draw(Renderer &) const;
 
   void setDirection(float, float);
@@ -38,6 +36,8 @@ private:
   void moveSegment(int, float);
   SDL_Color mColor{0, 255, 0, 255};
   std::vector<SnakeSegment> mBody;
-  std::deque<BreadCrumbs> mTrail;
+  std::deque<PathTrails> mTrail;
+  int static constexpr mSpeed{GameConfig::SnakeSpeed};
+  int static constexpr mSegmentSize{GameConfig::SnakeSegmentSize};
   SDL_FPoint mDirection{1.0f, 0.0f};
 };

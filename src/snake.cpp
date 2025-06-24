@@ -4,7 +4,7 @@
 #include <cmath>
 
 // TODO:
-/* Have to add direction to BreadCrumbs so we get very smooth
+/* Have to add direction to PathTrails so we get very smooth
  * movement.
  */
 
@@ -12,10 +12,6 @@ Snake::Snake() {
   mBody.emplace_back(SDL_FRect{
       GameConfig::LogicalWidth / 2.0f, GameConfig::LogicalHeight / 2.0f,
       GameConfig::GridCellSize, GameConfig::GridCellSize});
-}
-
-Snake::Snake(float x, float y, float width, float height) {
-  mBody.push_back({x, y, width, height});
 }
 
 void Snake::draw(Renderer &renderer) const {
@@ -53,21 +49,17 @@ void Snake::wrapSegment(SnakeSegment &segment) {
 }
 
 void Snake::moveHead(float dt) {
-  constexpr float speed = GameConfig::SnakeSpeed;
-  mBody[0].mRect.x += mDirection.x * speed * dt;
-  mBody[0].mRect.y += mDirection.y * speed * dt;
+  mBody[0].mRect.x += mDirection.x * mSpeed * dt;
+  mBody[0].mRect.y += mDirection.y * mSpeed * dt;
   wrapSegment(mBody[0]);
   mTrail.emplace_front(SDL_FPoint{mBody[0].mRect.x, mBody[0].mRect.y});
 }
 
 void Snake::moveSegment(int segmentId, float dt) {
-  constexpr float speed = GameConfig::SnakeSpeed;
-  constexpr int spaceing = GameConfig::SnakeSegmentSize;
   SnakeSegment &segment = mBody[segmentId];
-
   // not checking for correctness
-  segment.mRect.x = mTrail[segmentId * spaceing].position.x;
-  segment.mRect.y = mTrail[segmentId * spaceing].position.y;
+  segment.mRect.x = mTrail[segmentId * mSegmentSize].position.x;
+  segment.mRect.y = mTrail[segmentId * mSegmentSize].position.y;
 }
 
 void Snake::addSegment() {
@@ -87,10 +79,10 @@ void Snake::addSegment() {
       direction.y /= length;
     }
   }
-  tail.mRect.x += direction.x * GameConfig::SnakeSegmentSize;
-  tail.mRect.y += direction.y * GameConfig::SnakeSegmentSize;
-  tail.mRect.w = GameConfig::SnakeSegmentSize;
-  tail.mRect.h = GameConfig::SnakeSegmentSize;
+  tail.mRect.x += direction.x * mSegmentSize;
+  tail.mRect.y += direction.y * mSegmentSize;
+  tail.mRect.w = mSegmentSize;
+  tail.mRect.h = mSegmentSize;
   mBody.push_back(tail);
 }
 
@@ -100,8 +92,7 @@ void Snake::update(float dt) {
     moveSegment(i, dt);
 
   if (mShouldGrow) {
-    for (int i = 0; i < GameConfig::GridCellSize / GameConfig::SnakeSegmentSize;
-         i++)
+    for (int i = 0; i < GameConfig::GridCellSize / mSegmentSize; i++)
       addSegment();
     mShouldGrow = false;
   }
