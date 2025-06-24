@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "config.hpp"
 #include "input_handler.hpp"
 #include <cstdint>
 
@@ -57,7 +58,7 @@ bool Game::run() {
   if (!init())
     return false;
 
-  constexpr float targetFrameTime = 1.0f / 120.0f;
+  constexpr float targetFrameTime = 1.0f / GameConfig::ExpectedFrameRate;
   uint64_t lastTime = SDL_GetPerformanceCounter();
   const auto freq = static_cast<float>(SDL_GetPerformanceFrequency());
 
