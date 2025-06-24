@@ -1,6 +1,5 @@
 #include "snake.hpp"
 #include "config.hpp"
-#include "game.hpp"
 #include <SDL3/SDL_rect.h>
 #include <cmath>
 
@@ -57,6 +56,7 @@ void Snake::moveHead(float dt) {
   constexpr float speed = GameConfig::SnakeSpeed;
   mBody[0].mRect.x += mDirection.x * speed * dt;
   mBody[0].mRect.y += mDirection.y * speed * dt;
+  wrapSegment(mBody[0]);
   mTrail.emplace_front(SDL_FPoint{mBody[0].mRect.x, mBody[0].mRect.y});
 }
 
@@ -98,9 +98,6 @@ void Snake::update(float dt) {
   moveHead(dt);
   for (int i = 1; i < mBody.size(); i++)
     moveSegment(i, dt);
-  for (auto &segment : mBody) {
-    wrapSegment(segment);
-  }
 
   if (mShouldGrow) {
     for (int i = 0; i < GameConfig::GridCellSize / GameConfig::SnakeSegmentSize;
