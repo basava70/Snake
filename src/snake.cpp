@@ -9,9 +9,9 @@
  */
 
 Snake::Snake() {
-  mBody.emplace_back(SDL_FRect{
-      GameConfig::LogicalWidth / 2.0f, GameConfig::LogicalHeight / 2.0f,
-      GameConfig::GridCellSize, GameConfig::GridCellSize});
+  mBody.emplace_back(SDL_FRect{GameConfig::LogicalWidth / 2.0f,
+                               GameConfig::LogicalHeight / 2.0f, mSegmentSize,
+                               mSegmentSize});
 }
 
 void Snake::draw(Renderer &renderer) const {

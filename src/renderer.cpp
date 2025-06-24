@@ -25,6 +25,10 @@ void Renderer::drawRect(SDL_FRect const &rect, SDL_Color color) {
   SDL_RenderFillRect(mRenderer, &rect);
 }
 
+void Renderer::drawTexture(SDL_Texture *texture, SDL_FRect const &dst) {
+  SDL_RenderTexture(mRenderer, texture, 0, &dst);
+}
+
 Renderer::~Renderer() {
   if (mRenderer) {
     SDL_DestroyRenderer(mRenderer);

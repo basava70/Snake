@@ -11,7 +11,7 @@ bool Font::init() {
     return false;
   }
 
-  mFont = TTF_OpenFont("fonts/MapleMono-NF-Regular", 12);
+  mFont = TTF_OpenFont("fonts/MapleMono-NF-Regular.ttf", 12);
   if (!mFont) {
     std::print("Error unable to locate font: {}", SDL_GetError());
     return false;

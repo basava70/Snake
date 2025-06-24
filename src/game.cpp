@@ -4,7 +4,8 @@
 #include <cstdint>
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
-    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags), mSnake() {}
+    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags), mSnake(),
+      mFpsCounter(mRenderer, mFont) {}
 
 bool Game::init() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -15,6 +16,9 @@ bool Game::init() {
     return false;
   if (!mRenderer.init(mWindow.getWindow()))
     return false;
+  if (!mFont.init()) {
+    return false;
+  }
 
   return true;
 }
@@ -84,9 +88,6 @@ bool Game::run() {
   return true;
 }
 
-void Game::cleanup() {
-  mWindow.destroy();
-  SDL_Quit();
-}
+void Game::cleanup() { SDL_Quit(); }
 
 Game::~Game() { cleanup(); }

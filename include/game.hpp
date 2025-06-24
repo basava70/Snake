@@ -1,5 +1,7 @@
 #pragma once
+#include "font.hpp"
 #include "food.hpp"
+#include "fps_counter.hpp"
 #include "input_handler.hpp"
 #include "renderer.hpp"
 #include "snake.hpp"
@@ -17,12 +19,14 @@ private:
   bool init();
   Window mWindow;
   Renderer mRenderer;
+  Font mFont;
 
   void processInput();
   InputHandler mInputHandler;
 
   Snake mSnake;
   Food mFood;
+  FpsCounter mFpsCounter;
 
   void update(float);
   void generateOutput();
