@@ -13,8 +13,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(SDL3 REQUIRED CONFIG)
-find_package(SDL3_IMAGE REQUIRED CONFIG)
-find_package(SDL3_TTF REQUIRED CONFIG)
+find_package(SDL3_image REQUIRED CONFIG)
+find_package(SDL3_ttf REQUIRED CONFIG)
 
 message(STATUS "Found SDL3 version: ${SDL3_VERSION}")
 message(STATUS "Found SDL3_image version: ${SDL3_image_VERSION}")
