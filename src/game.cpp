@@ -2,18 +2,20 @@
 #include "config.hpp"
 #include "input_handler.hpp"
 #include <SDL3/SDL_rect.h>
-#include <cstdint>
+#include <SDL3/SDL_timer.h>
+#include <chrono>
+#include <thread>
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
-    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags), mSnake(),
-      mFpsCounter(mRenderer, mFont) {}
+    : mWindowTitle(title), mWidth(width), mHeight(height), mFlags(flags),
+      mSnake(), mFpsCounter(mRenderer, mFont), mTitle(mRenderer, mFont) {}
 
 bool Game::init() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
     SDL_Log("Error initializing SDL: %s", SDL_GetError());
     return false;
   }
-  if (!mWindow.init(mTitle, mWidth, mHeight, mFlags))
+  if (!mWindow.init(mWindowTitle, mWidth, mHeight, mFlags))
     return false;
   if (!mRenderer.init(mWindow.getWindow()))
     return false;
@@ -50,6 +52,7 @@ void Game::update(float dt) {
   }
   mSnake.update(dt);
   mFpsCounter.update(dt);
+  mTitle.update(dt);
 }
 
 void Game::generateOutput() {
@@ -58,6 +61,7 @@ void Game::generateOutput() {
   mSnake.draw(mRenderer);
   mFood.draw(mRenderer);
   mFpsCounter.draw();
+  mTitle.draw();
   mRenderer.present();
 }
 
@@ -65,27 +69,26 @@ bool Game::run() {
   if (!init())
     return false;
 
-  constexpr float targetFrameTime = 1.0f / GameConfig::ExpectedFrameRate;
-  uint64_t lastTime = SDL_GetPerformanceCounter();
-  const auto freq = static_cast<float>(SDL_GetPerformanceFrequency());
+  constexpr std::chrono::duration<float> targetFrameDuration{
+      1.0f / GameConfig::ExpectedFrameRate};
+  auto lastTime = std::chrono::steady_clock::now();
 
   mFood.respawn();
   mIsRunning = true;
-  while (mIsRunning) {
 
-    uint64_t now = SDL_GetPerformanceCounter();
-    float dt = (now - lastTime) / freq; // deltatime
+  while (mIsRunning) {
+    auto now = std::chrono::steady_clock::now();
+    std::chrono::duration<float> dt = (now - lastTime); // deltatime
+
+    if (dt < targetFrameDuration) {
+      std::this_thread::sleep_until(lastTime + targetFrameDuration);
+      continue;
+    }
     lastTime = now;
 
     processInput();
-    update(dt);
+    update(dt.count());
     generateOutput();
-
-    float frameTime = (SDL_GetPerformanceCounter() - now) / freq;
-    float sleepTime = targetFrameTime - frameTime;
-
-    if (sleepTime > 0.0f)
-      SDL_Delay(static_cast<Uint32>(sleepTime * 1000));
   }
 
   return true;

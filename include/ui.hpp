@@ -1,0 +1,50 @@
+#include "font.hpp"
+#include "renderer.hpp"
+#include <SDL3/SDL_pixels.h>
+#include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_render.h>
+
+class UI {
+public:
+  UI(Renderer &, Font const &, SDL_Color color = {0, 0, 0, 255});
+  virtual void update(float) = 0;
+  virtual void draw() const = 0;
+  virtual ~UI() = 0;
+
+protected:
+  virtual void updateTexture() = 0;
+  std::string mText;
+  Font const &mFont;
+  Renderer &mRenderer;
+  SDL_FRect mRect;
+  SDL_Texture *mTexture{nullptr};
+  SDL_Color mColor;
+};
+
+// FPSCounter
+class FpsCounter : public UI {
+public:
+  FpsCounter(Renderer &, Font const &, SDL_Color color = {0, 0, 0, 255});
+  void update(float) override;
+  void draw() const override;
+  ~FpsCounter() override;
+
+private:
+  void updateTexture() override;
+  int mFps{0};
+  int mLastFPS{0};
+  float mAccumulatedTime{0.0f};
+  int mFrameCount{0};
+};
+
+// Title
+class Title : public UI {
+public:
+  Title(Renderer &, Font const &, SDL_Color color = {0, 0, 0, 255});
+  void update(float) override;
+  void draw() const override;
+  ~Title() override;
+
+private:
+  void updateTexture() override;
+};

@@ -1,17 +1,18 @@
 #pragma once
 #include "font.hpp"
 #include "food.hpp"
-#include "fps_counter.hpp"
 #include "input_handler.hpp"
 #include "renderer.hpp"
 #include "snake.hpp"
+#include "ui.hpp"
 #include "window.hpp"
 #include <SDL3/SDL_video.h>
 
 class Game {
 public:
   Game(char const *title, int width = 800, int height = 600,
-       SDL_WindowFlags flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN);
+       SDL_WindowFlags flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN |
+                               SDL_WINDOW_HIGH_PIXEL_DENSITY);
   bool run();
   void cleanup();
   ~Game();
@@ -27,12 +28,15 @@ private:
 
   Snake mSnake;
   Food mFood;
+
+  // UI
   FpsCounter mFpsCounter;
+  Title mTitle;
 
   void update(float);
   void generateOutput();
 
-  char const *mTitle{nullptr};
+  char const *mWindowTitle{nullptr};
   int mWidth = 800;
   int mHeight = 600;
   SDL_WindowFlags mFlags = SDL_WINDOW_RESIZABLE;
