@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "config.hpp"
 #include "input_handler.hpp"
+#include <SDL3/SDL_rect.h>
 #include <cstdint>
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
@@ -48,6 +49,7 @@ void Game::update(float dt) {
     mFood.respawn();
   }
   mSnake.update(dt);
+  mFpsCounter.update(dt);
 }
 
 void Game::generateOutput() {
@@ -55,6 +57,7 @@ void Game::generateOutput() {
   mRenderer.clear(color);
   mSnake.draw(mRenderer);
   mFood.draw(mRenderer);
+  mFpsCounter.draw();
   mRenderer.present();
 }
 

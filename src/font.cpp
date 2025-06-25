@@ -1,5 +1,6 @@
 #include "font.hpp"
 #include <SDL3/SDL_error.h>
+#include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_surface.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -17,6 +18,11 @@ bool Font::init() {
     return false;
   }
   return true;
+}
+
+SDL_Surface *Font::createSurfaceBlended(std::string const &text,
+                                        SDL_Color color) const {
+  return TTF_RenderText_Blended(mFont, text.c_str(), 0, color);
 }
 
 Font::~Font() {
