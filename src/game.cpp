@@ -1,10 +1,12 @@
 #include "game.hpp"
 #include "config.hpp"
 #include "input_handler.hpp"
+#include <SDL3/SDL_rect.h>
 #include <cstdint>
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
-    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags), mSnake() {}
+    : mTitle(title), mWidth(width), mHeight(height), mFlags(flags), mSnake(),
+      mFpsCounter(mRenderer, mFont) {}
 
 bool Game::init() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -15,6 +17,9 @@ bool Game::init() {
     return false;
   if (!mRenderer.init(mWindow.getWindow()))
     return false;
+  if (!mFont.init()) {
+    return false;
+  }
 
   return true;
 }
@@ -44,6 +49,7 @@ void Game::update(float dt) {
     mFood.respawn();
   }
   mSnake.update(dt);
+  mFpsCounter.update(dt);
 }
 
 void Game::generateOutput() {
@@ -51,6 +57,7 @@ void Game::generateOutput() {
   mRenderer.clear(color);
   mSnake.draw(mRenderer);
   mFood.draw(mRenderer);
+  mFpsCounter.draw();
   mRenderer.present();
 }
 
@@ -84,9 +91,6 @@ bool Game::run() {
   return true;
 }
 
-void Game::cleanup() {
-  mWindow.destroy();
-  SDL_Quit();
-}
+void Game::cleanup() { SDL_Quit(); }
 
 Game::~Game() { cleanup(); }

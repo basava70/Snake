@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_render.h>
 
 class Renderer {
 public:
@@ -7,6 +8,8 @@ public:
   void clear(SDL_Color);
   void present();
   void drawRect(SDL_FRect const &, SDL_Color);
+  void drawTexture(SDL_Texture *texture, SDL_FRect const &dst);
+  SDL_Texture *createTextureFromSurface(SDL_Surface *) const;
   ~Renderer();
 
 private:
