@@ -32,6 +32,7 @@ private:
   // UI
   FpsCounter mFpsCounter;
   Title mTitle;
+  BackGround mBackGround;
 
   void update(float);
   void generateOutput();

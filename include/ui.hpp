@@ -13,7 +13,6 @@ public:
   virtual ~UI() = 0;
 
 protected:
-  virtual void updateTexture() = 0;
   std::string mText;
   Font const &mFont;
   Renderer &mRenderer;
@@ -31,7 +30,7 @@ public:
   ~FpsCounter() override;
 
 private:
-  void updateTexture() override;
+  void updateTexture();
   int mFps{0};
   int mLastFPS{0};
   float mAccumulatedTime{0.0f};
@@ -46,7 +45,15 @@ public:
   void update(float) override;
   void draw() const override;
   ~Title() override;
+  void initTexture();
+};
 
-private:
-  void updateTexture() override;
+// Background
+class BackGround : public UI {
+public:
+  BackGround(Renderer &, Font const &);
+  void update(float) override;
+  void draw() const override;
+  ~BackGround() override;
+  void initTexture(const char *);
 };

@@ -8,7 +8,8 @@
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
     : mWindowTitle(title), mWidth(width), mHeight(height), mFlags(flags),
-      mSnake(), mFpsCounter(mRenderer, mFont), mTitle(mRenderer, mFont) {}
+      mSnake(), mFpsCounter(mRenderer, mFont), mTitle(mRenderer, mFont),
+      mBackGround(mRenderer, mFont) {}
 
 bool Game::init() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -22,8 +23,8 @@ bool Game::init() {
   if (!mFont.init()) {
     return false;
   }
-
-  mTitle.update(0.0f);
+  mTitle.initTexture();
+  mBackGround.initTexture("images/SnakeBackground.png");
 
   return true;
 }
@@ -54,12 +55,10 @@ void Game::update(float dt) {
   }
   mSnake.update(dt);
   mFpsCounter.update(dt);
-  // mTitle.update(dt);
 }
 
 void Game::generateOutput() {
-  SDL_Color color{125, 125, 125, 255};
-  mRenderer.clear(color);
+  mBackGround.draw();
   mSnake.draw(mRenderer);
   mFood.draw(mRenderer);
   mFpsCounter.draw();

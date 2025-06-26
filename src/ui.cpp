@@ -5,6 +5,7 @@
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_surface.h>
+#include <SDL3_image/SDL_image.h>
 #include <print>
 
 UI::UI(Renderer &renderer, Font const &font, SDL_Color color)
@@ -79,7 +80,7 @@ Title::Title(Renderer &renderer, Font const &font, SDL_Color color)
   mText = "Snake";
 }
 
-void Title::updateTexture() {
+void Title::initTexture() {
   SDL_Surface *surface = mFont.createSurfaceBlended(mText, mColor);
   if (!surface) {
     std::println("Error creating surface in Title: {}", SDL_GetError());
@@ -95,7 +96,7 @@ void Title::updateTexture() {
   }
 }
 
-void Title::update(float dt) { updateTexture(); }
+void Title::update(float dt) {}
 
 void Title::draw() const {
   SDL_FRect rect = mRect;
@@ -105,6 +106,24 @@ void Title::draw() const {
 }
 
 Title::~Title() {
+  if (mTexture) {
+    SDL_DestroyTexture(mTexture);
+    mTexture = nullptr;
+  }
+}
+
+// BackGround
+BackGround::BackGround(Renderer &renderer, Font const &font)
+    : UI(renderer, font) {}
+
+void BackGround::initTexture(const char *path) {
+  mTexture = mRenderer.createTextureFromImage(path);
+}
+void BackGround::update(float dt) {}
+
+void BackGround::draw() const { mRenderer.drawTexture(mTexture); }
+
+BackGround::~BackGround() {
   if (mTexture) {
     SDL_DestroyTexture(mTexture);
     mTexture = nullptr;

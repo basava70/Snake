@@ -2,6 +2,7 @@
 #include "config.hpp"
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_surface.h>
+#include <SDL3_image/SDL_image.h>
 
 bool Renderer::init(SDL_Window *window) {
   mRenderer = SDL_CreateRenderer(window, 0);
@@ -31,8 +32,16 @@ void Renderer::drawTexture(SDL_Texture *texture, SDL_FRect const &dst) {
   SDL_RenderTexture(mRenderer, texture, 0, &dst);
 }
 
+void Renderer::drawTexture(SDL_Texture *texture) {
+  SDL_RenderTexture(mRenderer, texture, 0, 0);
+}
+
 SDL_Texture *Renderer::createTextureFromSurface(SDL_Surface *surface) const {
   return SDL_CreateTextureFromSurface(mRenderer, surface);
+}
+
+SDL_Texture *Renderer::createTextureFromImage(const char *path) const {
+  return IMG_LoadTexture(mRenderer, path);
 }
 
 Renderer::~Renderer() {
