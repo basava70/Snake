@@ -3,6 +3,7 @@
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>
+#include <unordered_map>
 
 class UI {
 public:
@@ -35,6 +36,7 @@ private:
   int mLastFPS{0};
   float mAccumulatedTime{0.0f};
   int mFrameCount{0};
+  std::unordered_map<std::string, SDL_Texture *> mTextureCache;
 };
 
 // Title

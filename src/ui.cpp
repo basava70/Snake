@@ -1,4 +1,3 @@
-
 #include "ui.hpp"
 #include "config.hpp"
 #include "renderer.hpp"
@@ -19,18 +18,17 @@ FpsCounter::FpsCounter(Renderer &renderer, Font const &font, SDL_Color color)
 }
 
 // FpsCounter
-// TODO:
-//  Use cache for textures
 void FpsCounter::updateTexture() {
   if (mLastFPS == mFps)
     return;
 
-  if (mTexture) {
-    SDL_DestroyTexture(mTexture);
-    mTexture = nullptr;
-  }
-
   mText = "FPS: " + std::to_string(mFps);
+
+  auto it = mTextureCache.find(mText);
+  if (it != mTextureCache.end()) {
+    mTexture = it->second;
+    return;
+  }
 
   SDL_Surface *surface = mFont.createSurfaceBlended(mText, mColor);
   if (!surface) {
@@ -45,6 +43,7 @@ void FpsCounter::updateTexture() {
     std::println("Error creating texture in FpsCounter: {}", SDL_GetError());
     return;
   }
+  mTextureCache[mText] = mTexture;
 }
 
 void FpsCounter::update(float dt) {
@@ -56,6 +55,7 @@ void FpsCounter::update(float dt) {
     mAccumulatedTime = 0.0f;
     mFrameCount = 0;
     updateTexture();
+    mLastFPS = mFps;
   }
 }
 
@@ -67,16 +67,19 @@ void FpsCounter::draw() const {
 }
 
 FpsCounter::~FpsCounter() {
-  if (mTexture)
+  if (mTexture) {
     SDL_DestroyTexture(mTexture);
+    mTexture = nullptr;
+  }
 }
 
 // Title
 Title::Title(Renderer &renderer, Font const &font, SDL_Color color)
-    : UI(renderer, font, color) {}
+    : UI(renderer, font, color) {
+  mText = "Snake";
+}
 
 void Title::updateTexture() {
-  mText = "Snake";
   SDL_Surface *surface = mFont.createSurfaceBlended(mText, mColor);
   if (!surface) {
     std::println("Error creating surface in Title: {}", SDL_GetError());
@@ -92,7 +95,10 @@ void Title::updateTexture() {
   }
 }
 
-void Title::update(float dt) { updateTexture(); }
+void Title::update(float dt) {
+  if (!mTexture)
+    updateTexture();
+}
 
 void Title::draw() const {
   SDL_FRect rect = mRect;
@@ -102,6 +108,8 @@ void Title::draw() const {
 }
 
 Title::~Title() {
-  if (mTexture)
+  if (mTexture) {
     SDL_DestroyTexture(mTexture);
+    mTexture = nullptr;
+  }
 }
