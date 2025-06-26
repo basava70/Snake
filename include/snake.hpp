@@ -37,7 +37,8 @@ private:
   SDL_Color mColor{0, 255, 0, 255};
   std::vector<SnakeSegment> mBody;
   std::deque<PathTrails> mTrail;
-  int static constexpr mSpeed{GameConfig::SnakeSpeed};
-  int static constexpr mSegmentSize{GameConfig::SnakeSegmentSize};
+  constexpr static int mSpeed{GameConfig::SnakeSpeed};
+  constexpr static int mSegmentSize{GameConfig::SnakeSegmentSize};
+  constexpr static int mSegmentsPerBody = 1;
   SDL_FPoint mDirection{1.0f, 0.0f};
 };

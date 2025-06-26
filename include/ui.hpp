@@ -7,7 +7,7 @@
 
 class UI {
 public:
-  UI(Renderer &, Font const &, SDL_Color color = {0, 0, 0, 255});
+  UI(Renderer &, Font const &, SDL_Color color = {120, 0, 120, 255});
   virtual void update(float) = 0;
   virtual void draw() const = 0;
   virtual ~UI() = 0;

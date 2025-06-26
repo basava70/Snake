@@ -92,7 +92,7 @@ void Snake::update(float dt) {
     moveSegment(i, dt);
 
   if (mShouldGrow) {
-    for (int i = 0; i < GameConfig::GridCellSize / mSegmentSize; i++)
+    for (int i = 0; i < mSegmentsPerBody; i++)
       addSegment();
     mShouldGrow = false;
   }
