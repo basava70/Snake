@@ -23,6 +23,8 @@ bool Game::init() {
     return false;
   }
 
+  mTitle.update(0.0f);
+
   return true;
 }
 
@@ -52,7 +54,7 @@ void Game::update(float dt) {
   }
   mSnake.update(dt);
   mFpsCounter.update(dt);
-  mTitle.update(dt);
+  // mTitle.update(dt);
 }
 
 void Game::generateOutput() {

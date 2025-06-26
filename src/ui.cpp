@@ -95,10 +95,7 @@ void Title::updateTexture() {
   }
 }
 
-void Title::update(float dt) {
-  if (!mTexture)
-    updateTexture();
-}
+void Title::update(float dt) { updateTexture(); }
 
 void Title::draw() const {
   SDL_FRect rect = mRect;
