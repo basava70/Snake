@@ -12,7 +12,7 @@ bool Font::init() {
     return false;
   }
 
-  mFont = TTF_OpenFont("fonts/FiraCode-Regular.ttf", 12);
+  mFont = TTF_OpenFont("fonts/FiraCode-Regular.ttf", 14);
   if (!mFont) {
     std::print("Error unable to locate font: {}", SDL_GetError());
     return false;

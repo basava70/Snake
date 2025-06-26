@@ -24,7 +24,7 @@ protected:
 // FPSCounter
 class FpsCounter : public UI {
 public:
-  FpsCounter(Renderer &, Font const &, SDL_Color color = {0, 0, 0, 255});
+  FpsCounter(Renderer &, Font const &);
   void update(float) override;
   void draw() const override;
   ~FpsCounter() override;
@@ -41,7 +41,7 @@ private:
 // Title
 class Title : public UI {
 public:
-  Title(Renderer &, Font const &, SDL_Color color = {0, 0, 0, 255});
+  Title(Renderer &, Font const &);
   void update(float) override;
   void draw() const override;
   ~Title() override;

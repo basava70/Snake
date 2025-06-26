@@ -1,6 +1,7 @@
 #include "ui.hpp"
 #include "config.hpp"
 #include "renderer.hpp"
+#include <SDL3/SDL_error.h>
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>
@@ -12,8 +13,8 @@ UI::UI(Renderer &renderer, Font const &font, SDL_Color color)
     : mRenderer(renderer), mFont(font), mColor(color) {}
 UI::~UI() = default;
 
-FpsCounter::FpsCounter(Renderer &renderer, Font const &font, SDL_Color color)
-    : UI(renderer, font, color) {
+FpsCounter::FpsCounter(Renderer &renderer, Font const &font)
+    : UI(renderer, font) {
   mText = "FPS: " + std::to_string(mFps);
   // I want to have sdl_surface and texture here
 }
@@ -75,8 +76,7 @@ FpsCounter::~FpsCounter() {
 }
 
 // Title
-Title::Title(Renderer &renderer, Font const &font, SDL_Color color)
-    : UI(renderer, font, color) {
+Title::Title(Renderer &renderer, Font const &font) : UI(renderer, font) {
   mText = "Snake";
 }
 
@@ -118,10 +118,28 @@ BackGround::BackGround(Renderer &renderer, Font const &font)
 
 void BackGround::initTexture(const char *path) {
   mTexture = mRenderer.createTextureFromImage(path);
+  if (!mTexture) {
+    std::println("Error creating backgroung texture: {}", SDL_GetError());
+    return;
+  }
+  SDL_SetTextureScaleMode(mTexture, SDL_SCALEMODE_NEAREST);
 }
 void BackGround::update(float dt) {}
 
-void BackGround::draw() const { mRenderer.drawTexture(mTexture); }
+void BackGround::draw() const {
+  const int tileSize = 512;
+
+  int winW = GameConfig::LogicalWidth;
+  int winH = GameConfig::LogicalHeight;
+
+  for (int y = 0; y < winH; y += tileSize) {
+    for (int x = 0; x < winW; x += tileSize) {
+      SDL_FRect dst{static_cast<float>(x), static_cast<float>(y),
+                    static_cast<float>(tileSize), static_cast<float>(tileSize)};
+      mRenderer.drawTexture(mTexture, dst);
+    }
+  }
+}
 
 BackGround::~BackGround() {
   if (mTexture) {
