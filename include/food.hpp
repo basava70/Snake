@@ -4,9 +4,11 @@
 
 class Food {
 public:
-  void draw(Renderer &) const;
+  Food(Renderer &);
+  void draw() const;
   void respawn();
   SDL_FRect getHead() const;
+  void initTexture(char const *);
 
 private:
   SDL_FRect mBody{0, 0, GameConfig::FoodSize, GameConfig::FoodSize};
@@ -15,4 +17,6 @@ private:
                                                          GameConfig::FoodSize};
   std::uniform_real_distribution<float> mDistY{0.0f, GameConfig::LogicalHeight -
                                                          GameConfig::FoodSize};
+  Renderer &mRenderer;
+  SDL_Texture *mTexture{nullptr};
 };

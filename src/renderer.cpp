@@ -1,7 +1,6 @@
 #include "renderer.hpp"
 #include "config.hpp"
 #include <SDL3/SDL_render.h>
-#include <SDL3/SDL_surface.h>
 #include <SDL3_image/SDL_image.h>
 
 bool Renderer::init(SDL_Window *window) {
