@@ -11,7 +11,12 @@
 
 UI::UI(Renderer &renderer, Font const &font, SDL_Color color)
     : mRenderer(renderer), mFont(font), mColor(color) {}
-UI::~UI() = default;
+UI::~UI() {
+  if (mTexture) {
+    SDL_DestroyTexture(mTexture);
+    mTexture = nullptr;
+  }
+}
 
 FpsCounter::FpsCounter(Renderer &renderer, Font const &font)
     : UI(renderer, font) {
@@ -68,13 +73,6 @@ void FpsCounter::draw() const {
   mRenderer.drawTexture(mTexture, finalRect);
 }
 
-FpsCounter::~FpsCounter() {
-  if (mTexture) {
-    SDL_DestroyTexture(mTexture);
-    mTexture = nullptr;
-  }
-}
-
 // Title
 Title::Title(Renderer &renderer, Font const &font) : UI(renderer, font) {
   mText = "Snake";
@@ -105,13 +103,6 @@ void Title::draw() const {
   mRenderer.drawTexture(mTexture, rect);
 }
 
-Title::~Title() {
-  if (mTexture) {
-    SDL_DestroyTexture(mTexture);
-    mTexture = nullptr;
-  }
-}
-
 // BackGround
 BackGround::BackGround(Renderer &renderer, Font const &font)
     : UI(renderer, font) {}
@@ -138,12 +129,5 @@ void BackGround::draw() const {
                     static_cast<float>(tileSize), static_cast<float>(tileSize)};
       mRenderer.drawTexture(mTexture, dst);
     }
-  }
-}
-
-BackGround::~BackGround() {
-  if (mTexture) {
-    SDL_DestroyTexture(mTexture);
-    mTexture = nullptr;
   }
 }
