@@ -10,7 +10,7 @@ public:
   UI(Renderer &, Font const &, SDL_Color color = {0, 0, 0, 255});
   virtual void update(float) = 0;
   virtual void draw() const = 0;
-  virtual ~UI() = 0;
+  virtual ~UI();
 
 protected:
   std::string mText;
@@ -27,7 +27,7 @@ public:
   FpsCounter(Renderer &, Font const &);
   void update(float) override;
   void draw() const override;
-  ~FpsCounter() override;
+  ~FpsCounter() override = default;
 
 private:
   void updateTexture();
@@ -44,7 +44,7 @@ public:
   Title(Renderer &, Font const &);
   void update(float) override;
   void draw() const override;
-  ~Title() override;
+  ~Title() override = default;
   void initTexture();
 };
 
@@ -54,6 +54,6 @@ public:
   BackGround(Renderer &, Font const &);
   void update(float) override;
   void draw() const override;
-  ~BackGround() override;
+  ~BackGround() override = default;
   void initTexture(const char *);
 };
