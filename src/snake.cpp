@@ -1,22 +1,39 @@
 #include "snake.hpp"
 #include "config.hpp"
+#include "renderer.hpp"
+#include <SDL3/SDL_error.h>
 #include <SDL3/SDL_rect.h>
 #include <cmath>
+#include <print>
 
 // TODO:
 /* Have to add direction to PathTrails so we get very smooth
  * movement.
  */
 
-Snake::Snake() {
+Snake::Snake(Renderer &renderer) : mRenderer(renderer) {
   mBody.emplace_back(SDL_FRect{GameConfig::LogicalWidth / 2.0f,
-                               GameConfig::LogicalHeight / 2.0f, mSegmentSize,
-                               mSegmentSize});
+                               GameConfig::LogicalHeight / 2.0f, mHeadSize,
+                               mHeadSize});
 }
 
-void Snake::draw(Renderer &renderer) const {
-  for (auto const &segment : mBody) {
-    renderer.drawRect(segment.mRect, mColor);
+void Snake::initTexture(char const *head_path, char const *body_path) {
+  mHeadTexture = mRenderer.createTextureFromImage(head_path);
+  if (!mHeadTexture) {
+    std::println("Error loading snake head image: {}", SDL_GetError());
+    return;
+  }
+  mBodyTexture = mRenderer.createTextureFromImage(body_path);
+  if (!mBodyTexture) {
+    std::println("Error loading snake body image: {}", SDL_GetError());
+    return;
+  }
+}
+
+void Snake::draw() const {
+  mRenderer.drawTexture(mHeadTexture, mBody[0]);
+  for (int segmentId = 1; segmentId < mBody.size(); segmentId++) {
+    mRenderer.drawTexture(mBodyTexture, mBody[segmentId]);
   }
 }
 
@@ -25,15 +42,15 @@ void Snake::setDirection(float dx, float dy) {
   mDirection.y = dy;
 }
 
-SDL_FRect Snake::getHead() const { return mBody.front().mRect; }
+SDL_FRect Snake::getHead() const { return mBody.front(); }
 
 void Snake::grow() { mShouldGrow = true; }
 
-void Snake::wrapSegment(SnakeSegment &segment) {
-  float &x = segment.mRect.x;
-  float &y = segment.mRect.y;
-  float w = segment.mRect.w;
-  float h = segment.mRect.h;
+void Snake::wrapSegment(SDL_FRect &segment) {
+  float &x = segment.x;
+  float &y = segment.y;
+  float w = segment.w;
+  float h = segment.h;
   int maxX = GameConfig::LogicalWidth;
   int maxY = GameConfig::LogicalHeight;
 
@@ -49,26 +66,26 @@ void Snake::wrapSegment(SnakeSegment &segment) {
 }
 
 void Snake::moveHead(float dt) {
-  mBody[0].mRect.x += mDirection.x * mSpeed * dt;
-  mBody[0].mRect.y += mDirection.y * mSpeed * dt;
+  mBody[0].x += mDirection.x * mSpeed * dt;
+  mBody[0].y += mDirection.y * mSpeed * dt;
   wrapSegment(mBody[0]);
-  mTrail.emplace_front(SDL_FPoint{mBody[0].mRect.x, mBody[0].mRect.y});
+  mTrail.emplace_front(SDL_FPoint{mBody[0].x, mBody[0].y});
 }
 
 void Snake::moveSegment(int segmentId, float dt) {
-  SnakeSegment &segment = mBody[segmentId];
+  SDL_FRect &segment = mBody[segmentId];
   // not checking for correctness
-  segment.mRect.x = mTrail[segmentId * mSegmentSize].position.x;
-  segment.mRect.y = mTrail[segmentId * mSegmentSize].position.y;
+  segment.x = mTrail[segmentId * mSegmentSize].position.x;
+  segment.y = mTrail[segmentId * mSegmentSize].position.y;
 }
 
 void Snake::addSegment() {
-  SnakeSegment tail;
+  SDL_FRect tail;
   SDL_FPoint direction = mDirection;
 
   if (mBody.size() >= 2) {
-    SDL_FRect last = mBody.back().mRect;
-    SDL_FRect secondLast = mBody[mBody.size() - 2].mRect;
+    SDL_FRect last = mBody.back();
+    SDL_FRect secondLast = mBody[mBody.size() - 2];
     SDL_FPoint direction{last.x - secondLast.x, last.y - secondLast.y};
 
     // Normalize direction
@@ -79,10 +96,10 @@ void Snake::addSegment() {
       direction.y /= length;
     }
   }
-  tail.mRect.x += direction.x * mSegmentSize;
-  tail.mRect.y += direction.y * mSegmentSize;
-  tail.mRect.w = mSegmentSize;
-  tail.mRect.h = mSegmentSize;
+  tail.x += direction.x * mSegmentSize;
+  tail.y += direction.y * mSegmentSize;
+  tail.w = mSegmentSize;
+  tail.h = mSegmentSize;
   mBody.push_back(tail);
 }
 

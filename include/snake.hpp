@@ -7,20 +7,15 @@
 #include <deque>
 #include <vector>
 
-struct SnakeSegment {
-  SDL_FRect mRect{0.0f, 0.0f, GameConfig::SnakeSegmentSize,
-                  GameConfig::SnakeSegmentSize};
-};
-
 struct PathTrails {
   SDL_FPoint position{0.0f, 0.0f};
 };
 
 class Snake {
 public:
-  Snake();
-  void draw(Renderer &) const;
-
+  Snake(Renderer &);
+  void draw() const;
+  void initTexture(char const *, char const *);
   void setDirection(float, float);
   void update(float);
   SDL_FRect getHead() const;
@@ -30,15 +25,19 @@ public:
 private:
   void moveHead(float);
   void addSegment();
-  void wrapSegment(SnakeSegment &);
+  void wrapSegment(SDL_FRect &);
   bool mShouldGrow = false;
   bool mRevertHeadBack = false;
   void moveSegment(int, float);
   SDL_Color mColor{0, 255, 0, 255};
-  std::vector<SnakeSegment> mBody;
+  std::vector<SDL_FRect> mBody;
   std::deque<PathTrails> mTrail;
   constexpr static int mSpeed{GameConfig::SnakeSpeed};
   constexpr static int mSegmentSize{GameConfig::SnakeSegmentSize};
+  constexpr static int mHeadSize{GameConfig::SnakeHeadSize};
   constexpr static int mSegmentsPerBody = 1;
   SDL_FPoint mDirection{1.0f, 0.0f};
+  Renderer &mRenderer;
+  SDL_Texture *mHeadTexture{nullptr};
+  SDL_Texture *mBodyTexture{nullptr};
 };

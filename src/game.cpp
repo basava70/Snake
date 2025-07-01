@@ -8,7 +8,7 @@
 
 Game::Game(char const *title, int width, int height, SDL_WindowFlags flags)
     : mWindowTitle(title), mWidth(width), mHeight(height), mFlags(flags),
-      mSnake(), mFood(mRenderer), mFpsCounter(mRenderer, mFont),
+      mSnake(mRenderer), mFood(mRenderer), mFpsCounter(mRenderer, mFont),
       mTitle(mRenderer, mFont), mBackGround(mRenderer, mFont) {}
 
 bool Game::init() {
@@ -26,6 +26,7 @@ bool Game::init() {
   mTitle.initTexture();
   mBackGround.initTexture("images/Grass_03.png");
   mFood.initTexture("images/apple.png");
+  mSnake.initTexture("images/snake_head.png", "images/snake_body.png");
 
   return true;
 }
@@ -60,7 +61,7 @@ void Game::update(float dt) {
 
 void Game::generateOutput() {
   mBackGround.draw();
-  mSnake.draw(mRenderer);
+  mSnake.draw();
   mFood.draw();
   mFpsCounter.draw();
   mTitle.draw();
