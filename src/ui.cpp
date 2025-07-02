@@ -118,7 +118,7 @@ void BackGround::initTexture(const char *path) {
 void BackGround::update(float dt) {}
 
 void BackGround::draw() const {
-  SDL_Color color{128, 128, 128, 128};
+  SDL_Color color{128, 128, 128, 255};
   mRenderer.clear(color);
   // const int tileSize = 512;
   //
