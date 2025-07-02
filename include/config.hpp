@@ -3,9 +3,17 @@
 namespace GameConfig {
 constexpr int LogicalWidth = 1020;
 constexpr int LogicalHeight = 720;
-constexpr int SnakeSegmentSize = 10;
+constexpr int SnakeSegmentSize = 20;
 constexpr int SnakeHeadSize = 20;
 constexpr int FoodSize = 40;
 constexpr int SnakeSpeed = 100;
 constexpr int ExpectedFrameRate = 120;
+
+struct Circle {
+  float radius = 0.0f;
+  float x = 0.0f;
+  float y = 0.0f;
+};
+
 } // namespace GameConfig
+using Circle = GameConfig::Circle;

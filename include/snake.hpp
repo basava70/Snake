@@ -21,6 +21,7 @@ public:
   SDL_FRect getHead() const;
   void setHead(SDL_FRect const &);
   void grow();
+  SDL_FPoint getHeadPosition() const;
 
 private:
   void moveHead(float);

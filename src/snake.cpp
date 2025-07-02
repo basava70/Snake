@@ -69,7 +69,12 @@ void Snake::moveHead(float dt) {
   mBody[0].x += mDirection.x * mSpeed * dt;
   mBody[0].y += mDirection.y * mSpeed * dt;
   wrapSegment(mBody[0]);
+
   mTrail.emplace_front(SDL_FPoint{mBody[0].x, mBody[0].y});
+}
+
+SDL_FPoint Snake::getHeadPosition() const {
+  return {mBody[0].x + mHeadSize / 2.0f, mBody[0].y + mHeadSize / 2.0f};
 }
 
 void Snake::moveSegment(int segmentId, float dt) {

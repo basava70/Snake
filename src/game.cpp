@@ -49,9 +49,22 @@ void Game::processInput() {
 
 void Game::update(float dt) {
   // collision
-  SDL_FRect snakeHead = mSnake.getHead();
-  SDL_FRect foodHead = mFood.getHead();
-  if (SDL_HasRectIntersectionFloat(&snakeHead, &foodHead)) {
+  // SDL_FRect snakeHead = mSnake.getHead();
+  // SDL_FRect foodHead = mFood.getHead();
+  // if (SDL_HasRectIntersectionFloat(&snakeHead, &foodHead)) {
+  //   mSnake.grow();
+  //   mFood.respawn();
+  // }
+
+  auto snakePos = mSnake.getHeadPosition();
+  auto foodPos = mFood.getFoodPosition();
+  auto dx = snakePos.x - foodPos.x;
+  auto dy = snakePos.y - foodPos.y;
+  bool collision =
+      (dx * dx + dy * dy) <
+      (GameConfig::FoodSize / 4.0f + GameConfig::SnakeHeadSize / 2.0f) *
+          (GameConfig::FoodSize / 4.0f + GameConfig::SnakeHeadSize / 2.0f);
+  if (collision) {
     mSnake.grow();
     mFood.respawn();
   }

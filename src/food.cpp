@@ -1,5 +1,6 @@
 #include "food.hpp"
 #include "renderer.hpp"
+#include <SDL3/SDL_rect.h>
 #include <print>
 
 Food::Food(Renderer &renderer) : mRenderer(renderer) {}
@@ -18,5 +19,8 @@ void Food::respawn() {
 }
 
 SDL_FRect Food::getHead() const { return mBody; }
+SDL_FPoint Food::getFoodPosition() const {
+  return {mBody.x + mFoodSize / 2.0f, mBody.y + mFoodSize / 2.0f};
+}
 
 void Food::draw() const { mRenderer.drawTexture(mTexture, mBody); }
