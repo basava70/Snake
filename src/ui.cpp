@@ -118,16 +118,19 @@ void BackGround::initTexture(const char *path) {
 void BackGround::update(float dt) {}
 
 void BackGround::draw() const {
-  const int tileSize = 512;
-
-  int winW = GameConfig::LogicalWidth;
-  int winH = GameConfig::LogicalHeight;
-
-  for (int y = 0; y < winH; y += tileSize) {
-    for (int x = 0; x < winW; x += tileSize) {
-      SDL_FRect dst{static_cast<float>(x), static_cast<float>(y),
-                    static_cast<float>(tileSize), static_cast<float>(tileSize)};
-      mRenderer.drawTexture(mTexture, dst);
-    }
-  }
+  SDL_Color color{128, 128, 128, 128};
+  mRenderer.clear(color);
+  // const int tileSize = 512;
+  //
+  // int winW = GameConfig::LogicalWidth;
+  // int winH = GameConfig::LogicalHeight;
+  //
+  // for (int y = 0; y < winH; y += tileSize) {
+  //   for (int x = 0; x < winW; x += tileSize) {
+  //     SDL_FRect dst{static_cast<float>(x), static_cast<float>(y),
+  //                   static_cast<float>(tileSize),
+  //                   static_cast<float>(tileSize)};
+  //     mRenderer.drawTexture(mTexture, dst);
+  //   }
+  // }
 }

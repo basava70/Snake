@@ -24,7 +24,7 @@ bool Game::init() {
     return false;
   }
   mTitle.initTexture();
-  mBackGround.initTexture("images/Grass_03.png");
+  mBackGround.initTexture("images/colored_desert.png");
   mFood.initTexture("images/apple.png");
   mSnake.initTexture("images/snake_head.png", "images/snake_body.png");
 
